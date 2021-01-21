@@ -1,7 +1,7 @@
 name: "."
-title: "Michelle Shteyn Handy"
+title: "Michelle Handy"
 description: |
-  Michelle Shteyn Handy
+  Michelle Handy
 output_dir: "docs"
 navbar:
   right:
@@ -9,6 +9,6 @@ navbar:
       href: index.html
     - text: "About"
       href: about.html
-    - text: "Teddy!"
+    - text: "Projects"
       href: teddy.html
 output: distill::distill_article
