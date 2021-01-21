@@ -1,5 +1,5 @@
 ---
-title: "Michelle Handy"
+title: "Michelle Shteyn Handy"
 image: "Headshot.jpg"
 links:
   - label: LinkedIn
