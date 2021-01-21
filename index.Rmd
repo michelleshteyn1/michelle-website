@@ -3,18 +3,14 @@ title: "Michelle Handy"
 image: "Headshot.jpg"
 links:
   - label: LinkedIn
-    url: "https://linkedin.com/"
-  - label: Twitter
-    url: "https://twitter.com/"
+    url: "https://www.linkedin.com/in/michelleshteynhandy/"
   - label: GitHub
-    url: "https://github.com/"
+    url: "https://github.com/michelleshteyn1"
   - label: Email
-    url: "mailto:email@email.com"
+    url: "mailto:michelleshteyn@gmail.com"
 output:
   postcards::jolla
 site: distill::distill_website
 ---
  
-I am a classically trained data scientist living in the San Francisco Bay Area. 
-Currently I work on the Oculus team at Facebook. I love talking about baseball, 
-true crime podcasts, and causal inference.
+I am a Ph.D. candidate with 6+ years of experience conducting quantitative and qualitative research in laboratory, field, and online settings. I am passionate about harnessing psychological science to address socially significant issues like climate change and public health. In my free time, I love doing yoga, trying out new recipes, and biking the Pacific coast.
