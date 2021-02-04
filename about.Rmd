@@ -1,10 +1,25 @@
 ---
-title: "About this site"
+title: "About Me"
 description: |
-  Some additional details about the website
+  As a researcher and analyst at UC Santa Barbara and at See Change Institute, I design and produce research on the motivators of climate change behavior. I employ advanced statistical methods to interpret data gathered from surveys, experiments, and large datasets. These methods include A/B testing, logistic and linear regressions, univariate and multivariate analysis, and multi-level modeling using statistical software packages such as R, SPSS, MPlus, and Excel. I maintain a robust and reproducible workflow using version-controlled projects with Github and R Markdown to write reports. 
+  
+  I'm interested in continuing to build my toolbox for research and data analysis by staying actively involved in the RStudio and TidyTuesday communities. While social psychology research primarily employs regression, ANOVAs, and A/B testing, I aim to continue learning advanced methods for analyzing environmental data including logistic regression, time series data, and spatial analysis.
+  
+  For fun, I'm working on a `Shiny` app which conducts text and sentiment analysis of seven classical novels, including *Arsène Lupin, Gentleman Burglar* by Maurice Leblanc!
 ---
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 ```
+# My Research
+  In my psychological research, I study the ways that having personal, concrete experiences with climate change (such as extreme weather) influence people's climate change beliefs, pro-environmental policy support, and sustainable behavior. I have investigated this question through a series of ongoing projects using a variety of methods. These methods include analyzing extreme weather search patterns on Google Trends, conducting a survey with a large online sample selected to be representative of the U.S. population on key demographics, conducting a field experiment in Montecito, California post-debris flows, and conducting a field experiment with citizen climate lobbyists in Washington, D.C.
+  
+  I have presented peer reviewed work to a diverse audience of research scientists and academics at four conference presentations.
+  
+### Presenting findings at UC Santa Barbara:
+U.S. regional Google search activity for extreme weather terms on Google Trends predicts U.S. regional climate change beliefs on Yale Climate Opinion Maps (Marlon et al., 2020). Presentation at Psychological & Brain Science Department's "Minicon," Winter 2019.
+
+![](images/Minicon.jpeg)
+
+### Research Team at Montecito, CA Debris Flow Site:
+![](images/Montecito.jpeg)
 

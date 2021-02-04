@@ -1,0 +1,128 @@
+---
+title: "Palmetto Binary Logistic Regression"
+description: |
+  This post shares my exploration of Florida palmetto data through visualizations and binary logistic regression. Data source: Abrahamson, 2019.
+author:
+  - name: Michelle Shteyn
+date: 02-04-2021
+output:
+  distill::distill_article:
+    self_contained: false
+    code_folding: hide
+---
+
+For my ESM244 class, I had a lot of fun learning how to conduct exploratory data visualizations on various palmetto plant variables using `GGally::ggpairs()`. I conducted binary logistic regression and produced a finalized table showing the number and percentage of *S. repens* and *S. etonia* palmettos correctly or incorrectly classified by my binary logistic regression model including 4 predictor variables and using a 50% cutoff.
+
+### Initial Data Wrangling:
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r}
+#Attach required packages
+library(here)
+library(tidyverse)
+library(broom)
+library(GGally)
+library(jtools)
+library(kableExtra)
+
+#Read in data
+palm <- read_csv(here("data","palmetto.csv")) %>% 
+  mutate(species = as.factor(species)) %>% 
+  mutate(species = case_when(
+    species==1~"S. repens",
+    species==2~"S. etonia"
+  ))
+```
+
+### Explore Differences between Two Palmetto Species: 
+
+```{r, warning=FALSE,message=FALSE}
+###Exploration with `ggpairs`
+palm %>% 
+  select(height,length,width,green_lvs, species) %>% 
+  ggpairs(aes(color = species))+
+  labs(title = "Differences in Height, Canopy Length, Canopy Width, and Green Leaves\nfor S. etonia and S. repens Palmetto Species, 1981 - 2017" )+
+  theme_bw()
+```
+
+**Figure 1**. Exploring relationships among explanatory variables height, length, width, and number of green leaves of two dominant palmetto species of south-central Florida, ongoing at 5-year intervals. Source: Abrahamson, 2019.
+
+This visualization demonstrates that, for both Palmetto species, the variables of height, length, and width are strongly related; however, the distributions in number of green leaves for the two species are quite different, with S. repens' distribution being more platykurtic than S. etonia's.
+
+
+### Binary Logistic Regression:
+
+**Table 1**. Coefficients for the predictor variables (plant height, canopy length, canopy width and green leaves) that relate to the *log odds* of the *S. etonia* outcome:
+
+```{r, message=FALSE, warning=FALSE}
+#Conduct blr
+palm1 <- read_csv(here("data","palmetto.csv")) %>% #Convert `species` to factor
+  mutate(species = as.factor(species)) 
+
+palm1_blr <- glm(species ~ height + length + width + green_lvs, 
+                            data = palm1, 
+                            family = "binomial")
+
+# Get a tidy version w/ broom: 
+blr_tidy <- broom::tidy(palm1_blr)
+
+
+blr_tidy %>% 
+  kable(col.names = c("Explanatory Variable",
+                      "Coefficient",
+                      "Std. Error for Coefficient",
+                      "T-Statistic",
+                      "P Value"),
+        digits = c(3, 3, 3))%>% 
+  kable_styling(bootstrap_options = "striped", full_width = FALSE, position = "left")
+```
+
+
+### Find actual probabilities associated with a palmetto being S. repens or S. etonia
+
+**Table 2**. Number and percentage of *S. repens* and *S. etonia* palmettos correctly or incorrectly classified by our binary logistic regression model using 4 predictor variables (plant height, canopy length, canopy width and green leaves), using a 50% cutoff. Source: Abrahamson, 2019.
+
+```{r, message=FALSE,warning=FALSE}
+blr_fitted <- palm1_blr %>% 
+    broom::augment(type.predict = "response") %>% 
+  mutate(species = as.numeric(species)) %>% 
+  select(-.rownames) %>% 
+  round(digits = 3)
+
+blr_fitted <- blr_fitted %>% 
+  mutate(species = case_when(
+    species==1~"S. repens",
+    species==2~"S. etonia"
+  )) 
+
+blr_fitted_1<-blr_fitted %>% 
+  select(species, .fitted) %>% 
+  mutate(final_classification = case_when(
+    .fitted >= .50 ~ "S. etonia",              #Since S. repens is the reference variable, a probability > 50% classifies it as S. etonia
+   .fitted < .50 ~ "S. repens")) %>% 
+  mutate(correct = case_when(
+    species=="S. repens" & final_classification=="S. repens" ~ "Correct",
+    species=="S. repens" & final_classification=="S. etonia" ~ "Incorrect",
+    species=="S. etonia" & final_classification=="S. etonia" ~ "Correct",
+    species=="S. etonia" & final_classification=="S. repens" ~ "Incorrect",
+  ))
+
+blr_fitted_1 %>% 
+  group_by(species, correct) %>% 
+summarize(count = n(),
+          percent = n()/12267*100) %>%  #11267 is the total n, Correct + Incorrect
+  kable(col.names = c("Species",
+                      "Final Classification Category",
+                      "Number of plants correctly or incorrectly classified",
+                      "Percent of plants correctly or incorrectly classified"
+  )) %>% 
+  kable_styling(bootstrap_options = "striped", full_width = FALSE, position = "left")
+```
+
+
+
+
+
