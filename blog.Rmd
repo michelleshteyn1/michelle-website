@@ -1,4 +1,4 @@
 ---
-title: "Welcome"  # any name you want here
+title: "Personal Projects and Reports"  # any name you want here
 listing: posts # do this exactly
 ---

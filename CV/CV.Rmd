@@ -1,28 +1,21 @@
 ---
 name: Michelle
 surname: Handy
-position: "Researcher and Analyst"
-address: "Department of Psychological & Brain Sciences, UC Santa Barbara"
+position: "Ph.D. Candidate"
+address: "Department of Psychological & Brain Sciences, University of California, Santa Barbara"
 phone: 973 641 6454
 www: michelleshteynhandy.com
 email: "michelleshteyn@gmail.com"
 github: michelleshteyn1
 linkedin: michelleshteynhandy
 date: "`r format(Sys.time(), '%B %Y')`"
-output: vitae::awesomecv
+output: vitae::moderncv
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 library(vitae)
-library(tinytex)
 ```
-
-# Some stuff about me
-
- * I poisoned myself doing research.
- * I was the first woman to win a Nobel prize
- * I was the first person and only woman to win a Nobel prize in two different sciences.
 
 # Education
 
@@ -30,35 +23,189 @@ library(tinytex)
 library(tibble)
 tribble(
   ~ Degree, ~ Year, ~ Institution, ~ Where,
-  "Informal studies", "1889-91", "Flying University", "Warsaw, Poland",
-  "Master of Physics", "1893", "Sorbonne Université", "Paris, France",
-  "Master of Mathematics", "1894", "Sorbonne Université", "Paris, France"
+  "B.S. with Honors", "2016", "University of Maryland, College Park", "Psychology",
+  "M.A.", "2020", "University of California, Santa Barbara", "Psychological & Brain Sciences",
+  "Ph.D.", "2021", "University of California, Santa Barbara", "Psychological & Brain Sciences"
 ) %>% 
   detailed_entries(Degree, Year, Institution, Where)
 ```
-
-# Nobel Prizes
+# Theses
 
 ```{r}
 tribble(
-  ~Year, ~Type, ~Desc,
-  1903, "Physics", "Awarded for her work on radioactivity with Pierre Curie and Henri Becquerel",
-  1911, "Chemistry", "Awarded for the discovery of radium and polonium"
+  ~Category, ~Year, ~Title, ~Department,
+  "Master's Thesis:","2020","Regional Extreme Weather Concern and its Relation to Support for Environmental Action","Department of Psychological & Brain Sciences (advisor: David Sherman, Ph.D.)",
+  "Honor's Thesis:","2016","Examining the Effects of Combined Construal on Task Persistence","Department of 			Psychology, University of Maryland (mentor: Richard Yi, Ph.D.)"
 ) %>% 
-  brief_entries(
-    glue::glue("Nobel Prize in {Type}"),
-    Year, 
-    Desc
-  )
+  detailed_entries(Category, Year, Title, Department)
+```
+
+
+# Professional Memberships
+
+```{r}
+tribble(
+  ~Org, ~Year,
+  "Society for Personality and Social Psychology (SPSP)","2016-present",
+  "Association for Psychological Science (APS)","2016-present",
+  "American Psychological Association (APA)","2016-present",
+  "Phi Beta Kappa Society","2016-present",
+) %>% 
+ detailed_entries(Org, Year)
+```
+
+# Research Experience
+
+## Paid Positions
+
+```{r}
+tribble(~Position, ~Year, ~Project, ~Department,
+        "Graduate Student Researcher ($1,000)","2020","as part of “Health Psychology & COVID-19 Interview Project”","APS Teaching Fund Microgrants program (PI: Dr. David Sherman)",
+        "Graduate Student Researcher ($6,185)","2020","as part of LVLWGB, NSF Grant","(PI: Dr. Lisa Leombruni with Co-PI: Dr. Heather Hodges)",
+        "Graduate Student Researcher ($7,137)","2019","as part of “Sociocultural Determinants of Human Motives”","NSF Grant (PI: Dr. David Sherman with Co-PI: Dr. Heejung Kim)",
+        "Graduate Student Researcher ($5,223)","2019","as part of “Gift Fund; Debris Flow, Project Code KE538”","(PI: Dr. Ed 		Keller)",
+        "Graduate Student Researcher ($2000)","2018","as part of “Promoting HPV Vaccination among College Students Via Health Message Framing”","UC Health Psychology Consortium Seed Grant, 2017, $9,994 (PI: Dr. David 			Sherman with Co-PI: Dr. Kate Sweeny)"
+        ) %>% 
+  detailed_entries(Position,Year,Project,Department)
 ```
 
 # Publications
 
-```{r}
-library(dplyr)
-knitr::write_bib(c("vitae", "tibble"), "packages.bib")
+1. Sherman, D. K., **Shteyn, M. F.**, Han, H., & Van Boven, L. (2020). The exchange between citizens and elected officials: A social psychological approach to lobbying for climate policy. *Behavioural Public Policy*.
 
-bibliography_entries("packages.bib") %>%
-  arrange(desc(author$family), issued)
+# Manuscripts under Editorial Review or In Preparation
+
+1. Anderson, S.E., **Shteyn, M.F.**, Gehlbach, H., & Virlar-Knight, D. (in preparation). Psychological distance and the effect of connecting extreme weather events to climate change.  
+2. Binning, K.R., Conrique, B.I., Areguin, M., Brick, C., Ehret, P., **Shteyn, M.F.**, Updegraff, J.A., & Sherman, D. K. (in preparation). Health messaging in a diverse society: Effects of gain and loss frames on health behaviors 	among latina/os in the U.S.  
+3. Sherman, D.K., Updegraff, J., **Shteyn, M.F.**, Eom, K., & Kim, H. (under review at *Personality and Social Psychology Bulletin*). The intersection of collectivism and 	socioeconomic status: Examining the impact of beliefs and social norms on environmental action.  
+4. **Shteyn, M.F.**, Block, D.M., Kim, H., Knowles, E.D., Mildenberger, M., & Sherman, D.K. (in preparation). Regional 	extreme weather concern and its relation to support for environmental action. 
+
+# Published Conference Abstracts or Presentations
+
+1. **Shteyn, M.F.** (2020, February). *Regional Extreme Weather Concern and its Relation to Support for Environmental Action*. Single Presenter talk at SPSP’s Symposium on “Harnessing Social Psychology to Address Social Issues and Public 	Policy,” New Orleans, LA.  
+2. **Shteyn, M.F.** (2019, August). *Psychological Proximity to Extreme Weather and its Relation to Regional Climate Change Beliefs and Policy Support*. Data blitz talk presented at SPF 2019: Big Data in Personality and Social Psychology, St. Louis, MO.  
+3. **Shteyn, M.F.** (2019, February). *Immediacy and Psychological Distance: Effects on Environmental Action*. Poster presentation at the SPSP Sustainability Psychology Preconference, Portland, OR.  
+4. **Shteyn, M.F.** (2017, January). *Discussing the Null Effects of Construal Level on Task Persistence*. Poster presentation at the SPSP Self-Regulation Preconference, San Antonio, TX.
+
+# Research Awards and Academic Honors
+
+```{r}
+tribble(~Category, ~Year, ~Title, ~Department,
+        "Graduate Travel Award Winner","2020","2020 SPSP Convention","",
+        "Registration Award","2019","SPSP Summer Psychology Forum: Big Data","",
+        "Senior Marshal","2016","2016 Psychology Department Commencement Ceremony","University of Maryland",
+        "Summer Scholars Award","2015","2015 BSOS Dean's Research Initiative ($2000)","University of Maryland",
+        "College Park Scholars Citation","2014","Life Sciences Program","",
+        "Outstanding Citizenship Award","2014","College Park Scholars","",
+        "President's Scholarship ($20,000)","2012-2016","University of Maryland",""
+  
+) %>% 
+  detailed_entries(Category, Year, Title, Department)
 ```
+
+# Teaching
+
+## Teaching Assistant
+
+```{r}
+tribble(
+  ~Class, ~Year,
+  "Health Psychology","2018, 2021",
+  "Instroduction to Psychology","2018, 2020",
+) %>% 
+ detailed_entries(Class, Year)
+```
+
+## Lab Instructor
+
+```{r}
+tribble(
+  ~Class, ~Year,
+  "Statistical Methods in Psychological & Brain Sciences","2020",
+  "Addressing Social Problems with Psychological Science","2019",
+  "Laboratory in Research Methods","2018",
+  "Laboratory in Advanced Research Methods","2018",
+  "Laboratory in Advanced Research Methods in Social Psychology","2017,2020"
+ 
+) %>% 
+ detailed_entries(Class, Year)
+```
+
+## Mentoring
+
+```{r}
+tribble(~Position, ~Year, ~Department,~Description,
+       "Mentor of 3 research assistants and leader of weekly academic reading group","Present","","",
+       "McNair Scholar Summer Mentor","2018","UCSB Academic Research Consortium","Mentored a first-generation, underrepresented student in her applications to Ph.D. programs",
+       "Appointed Career Panel Speaker","2016","Freshman Colloquim","University of Maryland College Park Scholars Life Sciences",
+       "Peer Mentor for Freshman Class","2013-2014","College Park Scholars Life Sciences",""
+       
+) %>% 
+  detailed_entries(Position, Year, Department, Description)
+  
+```
+
+## Guest Lectures
+
+```{r}
+tribble(~Title, ~Year, ~Class, ~Department,
+        "Immediacy and Psychological Distance: Effects on Environmental Action","2019","Guest lecture	for Addressing Social Problems with Psychological Science (PSY160)","Psychological & Brain Sciences 	Department, UC Santa Barbara. *(also cited above under Published Conference Abstracts and Presentations)",
+        "Health Psychology and the Environment","2019","Guest lecture for Health Psychology (PSY101)","UC Santa Barbara") %>% 
+  detailed_entries(Title,Year, Class, Department)
+```
+
+# Professional Activities
+
+```{r}
+tribble(~Position,~Year,
+        "Reviewer for 2 papers for the Journal of Behavioural Public Policy","2019") %>% 
+  detailed_entries(Position, Year)
+```
+
+# Invited Talks
+
+1. Leombruni, L., Hodges, H., **Shteyn, M.F.**, & Brush, A. (2020, October). E*nhancing Experiential Digital Learning: Exploring the Impact of Interactive & Narrative-Driven Media on Informal STEM Learning in Kids & Young Adults*. 	Presentation to PBS NOVA Polar Extremes.  
+2. **Shteyn, M.F.** (2020, February). *Regional Extreme Weather Concern and its Relation to Support for Environmental 	Action*. Social Psychology Area Meeting presentation, Psychological & Brain Sciences Department, UC Santa 	Barbara.*(also cited above under Published Conference Abstracts and Presentations)  
+3. **Shteyn, M.F.** (2020, January). *Construal Level and Work Motivation*. Lab meeting presentation, Management and Organization Department, USC Marshall School of Business.  
+4. **Shteyn, M.F.** (2019, May). *Immediacy and Psychological Distance: Effects on Environmental Action*. Graduate student mini-convention presentation, Psychological & Brain Sciences Department, UC Santa Barbara.  
+5. **Shteyn, M.F.** (2016, April). *Examining the Effects of Combined Construal on Task Persistence*. Poster presentation at the Annual Department of Psychology Poster Presentations, University of Maryland, College Park, MD. *(also cited above under Published Conference Abstracts and Presentations)
+
+# Service
+
+```{r}
+tribble(~Position, ~Year, ~Org, ~Location,
+        "Chair of Symposium","2020","SPSP, “Harnessing Social Psychology to Address Social Issues and Public Policy”","New Orleans, LA") %>% 
+  detailed_entries(Position, Year, Org,Location)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
