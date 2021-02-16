@@ -9,7 +9,7 @@ navbar:
       href: index.html
     - text: "About"
       href: about.html
-    - text: "Projects"
+    - text: "Portfolio"
       href: blog.html
     - text: "CV"
       href: CV/CV.pdf

@@ -1,5 +1,5 @@
 ---
-title: "Spatial Data Visualization: CA DFW Oil Spill"
+title: "Spatial Data Visualization"
 description: |
   In this project, I explored California oil spill data through spatial data visualization. Data source: Office of Spill Prevention and Response (OSPR), 2009.
 author:
@@ -92,7 +92,7 @@ oil_counts <- ca_counties_oil %>%
 
 # Cloropleth Map
 
-```{r, fig.cap="**Data source**: Office of Spill Prevention and Response (OSPR), 2009."}
+```{r, fig.cap="Source: Office of Spill Prevention and Response (OSPR), 2009."}
 ggplot(data = oil_counts) +
   geom_sf(aes(fill = n), color = "white", size = 0.1) +
   scale_fill_gradientn(colors = c("lightgray","orange","red")) +
