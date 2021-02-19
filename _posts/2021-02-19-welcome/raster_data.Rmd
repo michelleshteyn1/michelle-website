@@ -69,7 +69,7 @@ species_richness1 <- calc(species_richness, fun = sum, na.rm = TRUE) #Need to ma
 
 Need to convert the raster to a dataframe so that it is a suitable object for `ggplot()`. First, use the `raster::rasterToPoints()` function to convert the raster to a matrix of points. Then, use `as.data.frame()` to convert that matrix to a `data.frame` object.
 
-```{r, cache = TRUE, results = 'hide', warning = FALSE, message = FALSE, fig.cap= "**Figure 1**. This map depicts the probability of occurrence, based on relative environmental suitability, of 35 cetacean species that can be found in the California Bight. Each unit of the map depicts the number of species that occurs in that particular location (see legend). The threshold value above which a species is considered present was set at 0.6."}
+```{r, cache = TRUE, results = 'hide', warning = FALSE, message = FALSE, fig.cap= "This map depicts the probability of occurrence, based on relative environmental suitability, of 35 cetacean species that can be found in the California Bight. Each unit of the map depicts the number of species that occurs in that particular location (see legend). The threshold value above which a species is considered present was set at 0.6. This raster data was subsetted from AquaMaps (Kaschner et al., 2016)."}
 # Convert species_richness1 into a dataframe using `raster::rasterToPoints`
 species_richness1_df <- raster::rasterToPoints(species_richness1) %>%
   as.data.frame() 
@@ -88,6 +88,8 @@ geom_raster(data = species_richness1_df, aes(x=x,y=y, fill = layer)) +
 
 ```
 
+# Data citation
 
+Kaschner, K., Rius-Barile, J., Kesner-Reyes, K., Garilao, C., Kullander, S., Rees, T., & Froese, R. (2016). *AquaMaps: Predicted range maps for aquatic species*. (www.aquamaps.org)
 
 
