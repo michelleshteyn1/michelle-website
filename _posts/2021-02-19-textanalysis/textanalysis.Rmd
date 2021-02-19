@@ -1,0 +1,151 @@
+---
+title: "Text and Sentiment Analysis: Nirvana Songs"
+description: |
+  In this project, I explored text data on Nirvana song lyrics through word counts and sentiment analysis. Lyrics from https://www.lyricfind.com/.
+author:
+  - name: Michelle S. Handy
+    url: {}
+date: 02-19-2021
+output:
+  distill::distill_article:
+    self_contained: false
+    code_folding: hide
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(tidyverse)
+library(tidytext)
+library(textdata)
+library(ggwordcloud)
+library(readxl)
+library(wordcloud)
+library(here)
+```
+
+## Overview
+
+In this project, I explore word counts and conduct sentiment analysis on [The 10 Best Nirvana Songs, according to readers of *Rolling Stone* magazine](https://www.rollingstone.com/music/music-lists/readers-poll-the-10-best-nirvana-songs-17463/9-sappy-227768/). I create visualizations of the following:
+
+- Most Common Words Across All 10 Songs
+- Top 10 Words by Year Recorded
+- Top 3 Most Important Words by Song
+- Mean Sentiment by Song
+
+
+## Read in data and do some wrangling:
+
+```{r, warning=FALSE,message=FALSE}
+nirvana <- read_excel(here("data","nirvana.xlsx"))
+
+nirvana_tidy <- nirvana %>% 
+  mutate(lyrics = str_trim(lyrics)) %>% # Remove excess leading and trailing white space from 'lyrics'
+  mutate(lyrics = str_to_lower(lyrics)) # Change string to lowercase
+```
+
+
+## Tokenize text and remove stop words:
+
+Use `unnest_tokens()` to tokenize `nirvana_tidy()` (each word will be in its own row). Then, remove stop words using `tidyr::anti_join()`, which will omit any words in `stop_words` from `nirvana_tokens`.
+
+```{r, warning=FALSE,message=FALSE}
+nirvana_tokens <- nirvana_tidy %>% 
+  unnest_tokens(word, lyrics) %>% 
+    anti_join(stop_words) 
+
+nirvana_counts <- nirvana_tokens %>% 
+  count(year_recorded, word) #'yeah' was the most popular word used by Nirvana LOL, so I am adding it to my stop words. 
+  
+mystopwords <- tibble(word = c("yeah")) #add 'yeah' to mystopwords
+
+#remove `yeah` from `nirvana_tokens`
+nirvana_tokens <- nirvana_tokens %>% 
+  anti_join(mystopwords)
+
+#Count again
+nirvana_counts <- nirvana_tokens %>% 
+  count(year_recorded, word)
+```
+
+
+## Word cloud: most common words in Nirvana songs
+```{r, fig.cap="The most common words in Rolling Stone's 10 Best Nirvana Songs."}
+nirvana_counts %>%
+  with(wordcloud(word, n, max.words = 100, colors = c("mediumseagreen", "cornflowerblue", "darkorange", "mediumorchid4","royalblue","salmon2", "violetred1","red2"))) 
+```
+
+## Top 10 words by year recorded
+
+```{r, warning=FALSE, message=FALSE}
+top_10_words <- nirvana_counts %>% 
+  group_by(year_recorded) %>% 
+  arrange(-n) %>% 
+  slice(1:10)
+
+# Make a graph:
+ggplot(data = top_10_words, aes(x = word, y = n)) +
+  geom_col(fill = "blue") +
+  facet_wrap(~year_recorded, scales = "free") +
+  coord_flip() +
+  labs(title = "Most Frequently Used Words in Rolling Stone's\n 10 Best Nirvana Songs")
+```
+
+
+## Most important words by song
+
+Zipf's law states that the frequency that a word appears in a text should be inversely proportional to its rank; thus, words that appear less frequently should be more important.
+
+The statistic **tf_idf** (a word's *term frequency*(tf) multiplied by its *inverse document frequency*(idf)) is used to measure how important a word is in a body of text.
+
+Here I will use the `bind_tf_idf()` function to find the most important words across 10 Nirvana songs, by decreasing the weight for commonly used words and increasing the weight for words that are not used as frequently (Silge & Robinson, 2020).
+
+```{r, warning=FALSE,message=FALSE}
+#Find nirvana counts by song
+nirvana_counts_song <- nirvana_tokens %>% 
+  count(song, word)
+
+#Calculate tf-idf
+nirvana_tf_idf <- nirvana_counts_song %>% 
+  bind_tf_idf(word, song, n)
+
+#Look at a visualization for high tf-idf words across Nirvana songs
+
+library(forcats)
+
+nirvana_tf_idf %>%
+  group_by(song) %>%
+  slice_max(tf_idf, n = 3) %>%
+  ungroup() %>%
+  ggplot(aes(tf_idf, fct_reorder(word, tf_idf), fill = song)) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~song, ncol = 2, scales = "free") +
+  labs(x = "tf-idf", y = NULL, title = "Most Important Words by Nirvana Song")
+```
+
+
+## How do sentiments change across the 10 songs?
+
+Below, I use the AFINN lexicon from Finn Årup Nielsen, which assigns words a score ranging from -5 (most negative sentiment) to 5 (most positive sentiment).
+
+```{r, warning=FALSE, message=FALSE}
+#First, bind words in `nirvana_tokens` to `afinn` lexicon:
+nirvana_afinn <- nirvana_tokens %>% 
+  inner_join(get_sentiments("afinn"))
+
+# Find the mean afinn score by song: 
+afinn_means <- nirvana_afinn %>% 
+  group_by(song) %>% 
+  summarize(mean_afinn = mean(value))
+
+ggplot(data = afinn_means, 
+       aes(x = fct_rev(as.factor(song)), 
+           y = mean_afinn, fill = song)) +
+  geom_col(show.legend = FALSE) +
+  coord_flip()+
+  theme_minimal()+
+  labs(x = "Song", y = "Mean Sentiment Ranking (AFINN lexicon)", title = "Mean Sentiment by Nirvana Song")
+```
+
+
+

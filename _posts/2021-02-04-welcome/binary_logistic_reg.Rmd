@@ -1,5 +1,5 @@
 ---
-title: "Palmetto Binary Logistic Regression"
+title: "Binary Logistic Regression: Florida Palmettos"
 description: |
   In this project, I explored Florida palmetto data through visualizations and binary logistic regression. Data source: Abrahamson, 2019.
 author:
@@ -104,7 +104,7 @@ blr_tidy %>%
 
 ### Find actual probabilities associated with a palmetto being S. repens or S. etonia
 
-**Table 2**. Number and percentage of *S. repens* and *S. etonia* palmettos correctly or incorrectly classified by our binary logistic regression model using 4 predictor variables (plant height, canopy length, canopy width and green leaves), using a 50% cutoff. Source: Abrahamson, 2019.
+**Table 2**. Number and percentage of *S. repens* and *S. etonia* palmettos correctly or incorrectly classified by our binary logistic regression model using 4 predictor variables (plant height, canopy length, canopy width and green leaves) and a 50% cutoff. Source: Abrahamson, 2019.
 
 ```{r, message=FALSE,warning=FALSE}
 blr_fitted <- palm1_blr %>% 

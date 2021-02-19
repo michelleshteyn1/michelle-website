@@ -1,5 +1,5 @@
 ---
-title: "Spatial Data Visualization"
+title: "Spatial Data Visualization: California Oil Spill"
 description: |
   In this project, I explored California oil spill data through spatial data visualization. Data source: Office of Spill Prevention and Response (OSPR), 2009.
 author:
@@ -36,7 +36,7 @@ This report explores oil spill incidents in California in 2008 using data from C
 
 ## Read in the California oil spill data
 
-These data are measurements for oil spill incidents, where an incident refers to "a discharge or threatened discharge of petroleum or other deleterious material into the waters of the state." Here, I read in the layer with `read_sf()`, check the CRS, then make a quick plot to start.
+These data are measurements for oil spill incidents, where an incident refers to "a discharge or threatened discharge of petroleum or other deleterious material into the waters of the state" (OSPR). Here, I read in the layer with `read_sf()`, check the CRS, then make a quick plot to start.
 
 ```{r, collapse=TRUE, results='hide'}
 # Read in the oil spill layer:
@@ -76,7 +76,7 @@ tm_shape(ca_oil)+
 ```
 
 
-## Data wrangling:
+# Data wrangling:
 
 ```{r}
 #Use `st_join` for spatial joins
