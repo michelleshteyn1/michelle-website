@@ -1,0 +1,180 @@
+---
+title: "Multiple Linear Regression: Black-Throated Blue Warblers"
+description: |
+  In this project, I explored data on black-throated blue warblers through exploratory visualizations and multiple linear regression. Data source: Rodenhouse et al., 2019.
+author:
+  - name: Michelle S. Handy
+    url: {}
+date: 02-19-2021
+output:
+  distill::distill_article:
+    self_contained: false
+    code_folding: 'hide'
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+#Attach packages
+library(tidyverse)
+library(here)
+library(stargazer)
+library(naniar)
+library(broom)
+```
+
+# Overview
+
+This report analyses data collected by Dr. Rodenhouse and colleagues at Hubbard Brook Experimental Forest (1986 - 2010). Below, we explore relationships between selected black-throated blue warbler characteristics and mass using the following methods:
+
+- Creating exploratory ggplots 
+- Using multiple linear regression to describe relationships between bird mass and explanatory variables
+- Justifying variable/model selection based on diagnostic plots, overall model fit, AIC, and conceptual considerations
+- Presenting outcomes of which variables predict bird mass in a finalized regression table
+
+
+```{r}
+#Read in data, replace the value -99.99 with NA
+
+birds <- read.csv(here("data","bt_warblers.csv")) %>% 
+  replace_with_na(replace = list(bill_depth = -99.99)) %>% 
+  replace_with_na(replace = list(bill_culmen = -99.99)) %>% 
+  replace_with_na(replace = list(mass= -99.99)) %>% 
+  replace_with_na(replace = list(tarsus1 = -99.99)) %>% 
+  replace_with_na(replace = list(wing_r = -99.99)) 
+
+```
+
+# Visually explore the data
+
+### 1: Wing length vs. bird mass
+
+- Point color indicating sex
+- Faceted by bird age at capture
+
+```{r, message=FALSE,warning=FALSE}
+ggplot(data = birds, aes(x=wing_r, y = mass)) + 
+  geom_point(aes(color = sex)) + 
+  facet_wrap(~age_banded) + 
+  labs(x = "Wing Length (mm)",
+       y = "Body Mass (g)",
+       title = "Black-Throated Blue Warbler Bird Mass, as a Function of Wing Length")
+```
+
+### 2: Tarsus length vs. bird mass
+
+- Point color indicating sex
+- Faceted by elevation
+
+```{r, message=FALSE,warning=FALSE}
+ggplot(data = birds, aes(x=tarsus1, y = mass)) + 
+  geom_point(aes(color = sex)) + 
+  facet_wrap(~elevation) + 
+  labs(x = "Tarsus Length (mm)",
+       y = "Body Mass (g)",
+       title = "Black-Throated Blue Warbler Bird Mass, as a Function of Tarsus Length")
+```
+
+### 3: Bill depth vs. bird mass
+
+- Point color indicating sex
+- Faceted by bird age at capture
+
+```{r, message=FALSE,warning=FALSE}
+ggplot(data = birds, aes(x=bill_depth, y = mass)) + 
+  geom_point(aes(color = sex)) + 
+  facet_wrap(~age_banded) + 
+  labs(x = "Bill Depth (mm)",
+       y = "Body Mass (g)",
+       title = "Black-Throated Blue Warbler Bird Mass, as a Function of Bill Depth")
+```
+
+
+
+```{r, include=FALSE}
+#Use MLR describe relationships between bird mass & explanatory variables. Try different combinations of exploratory variables, then consider diagnostics, model fit, and AIC, to decide which model version to present. 
+
+#Build a few possible models
+bird_lm <- lm(mass ~ sex + age_banded + bill_depth + bill_culmen + tarsus1 + wing_r, data = birds)
+bird_lm1 <- lm(mass ~ sex + bill_depth + bill_culmen + tarsus1 + wing_r, data = birds)
+bird_lm2 <- lm(mass ~ sex + bill_depth + tarsus1 + wing_r, data = birds)
+bird_lm3 <- lm(mass ~ sex + wing_r, data = birds)
+
+#Examine overall model fit: they all seem around the same (R^2 ~.30)
+summary(bird_lm)
+summary(bird_lm1)
+summary(bird_lm2)
+summary(bird_lm3)
+
+#Look at model diagnostics
+plot(bird_lm) #One data point (332) seems to have large influence on this model (Cook's distance)
+plot(bird_lm1)
+plot(bird_lm2)
+plot(bird_lm3) # 2 outliers (obs 332 & 247) here, concerning
+
+#Compare the model AIC values
+AIC(bird_lm, k = 2) #1197.157
+AIC(bird_lm1, k = 2) #1193.2 - this is the lowest AIC
+AIC(bird_lm2, k = 2) #1199.775
+AIC(bird_lm3, k = 2) #2366.062
+
+#Based on these 4 models only, the Akaike Information Criterion indicates that 'bird_lm1' is the best balance between fit & complexity. It also makes sense conceptually, as sex and different body measurements are all variables which tend to influence an animal's size.
+```
+
+
+# Finalized Regression Table
+
+```{r,message=FALSE, warning=FALSE,echo=FALSE, results='asis'}
+stargazer(bird_lm1, type = "html", 
+  covariate.labels = c("Sex: Male","Bill Depth","Bill Culmen","Tarsus Length","Wing Length"),
+  dep.var.labels = "Bird mass")
+```
+### Model Selection Process
+
+4 possible explanatory models of bird mass were compared. These were: 
+
+(1) Bird Mass ~ Sex + Age Banded + Bill Depth + Bill Culmen + Tarsus Length + Wing Length
+(2) Bird Mass ~ Sex + Bill Depth + Bill Culmen + Tarsus Length + Wing Length
+(3) Bird Mass ~ Sex + Bill Depth + Tarsus Length + Wing Length
+(4) Bird Mass ~ Sex + Wing Length
+
+- Overall model fit for the four models were quite similar, with the variables explaining around 30% of the variance in body mass. 
+ - The Akaike Information Criterion indicates that **Model 2** is the best balance between fit & complexity. It also makes sense conceptually, as sex and various body measurements are all variables which tend to influence an animal's size.
+ 
+ 
+# Interpreting the model results
+```{r, include=FALSE}
+bird_lm1_tidy <- tidy(bird_lm1)
+
+# Return it:
+bird_lm1_tidy
+```
+- **Sex:** If birds are consistent across all other variables, we expect a *male* bird to weigh `r round(bird_lm1_tidy$estimate[2],2)` g **less** than a female bird, on average.  
+- **Bill Depth (mm):** The coefficient for bill depth (`r round(bird_lm1_tidy$estimate[3],2)`) is the average change we expect to see in body mass (grams) for a 1 mm increase in bill depth. 
+- **Bill Culmen (mm):** The bill culmen coefficient (`r round(bird_lm1_tidy$estimate[4],2)`) is the average change we expect to see in body mass (grams) for a 1 mm increase in bill culmen. 
+- **Tarsus Length (mm):** The tarsus length coefficient (`r round(bird_lm1_tidy$estimate[5],2)`) is the average change we expect to see in body mass (grams) for a 1 mm increase in tarsus length. 
+- **Right Wing Length (mm):** The right wing length coefficient (`r round(bird_lm1_tidy$estimate[6],2)`) is the average change we expect to see in body mass (grams) for a 1 mm increase in right wing length. 
+
+
+# Data Citation:
+
+Rodenhouse, N., R. Holmes, S. Sillett, and M. Webster. 2019. Black-throated Blue Warbler capture histories, Hubbard Brook Experimental Forest, 1986 - 2010 ver 4. Environmental Data Initiative. [https://doi.org/10.6073/pasta/ea985022acfdb76cd7beeaf8da6c39b1]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
