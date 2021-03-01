@@ -1,0 +1,127 @@
+---
+title: "Agglomerative Hierarchical Clustering: Water Chemistry"
+description: |
+  In this project, I explored water chemistry data in the Santa Barbara Coastal drainage area through hierarchical clustering. Data source: Santa Barbara Coastal LTER and J. Melack. 2019.
+author:
+  - name: Michelle S. Handy
+    url: {}
+date: 03-01-2021
+output:
+  distill::distill_article:
+    self_contained: false
+    code_folding: hide
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+# Overview
+
+This report explores stream chemistry in the Santa Barbara Coastal drainage area using data (ongoing since 2000) provided by Santa Barbara Coastal LTER and Dr. John Melack. Below, I use hierarchical clustering by complete linkage to create a dendrogram showing multivariate clustering for water chemistry by site. To perform hierarchical clustering by site, 
+
+- I will first make a data frame that has a single summary row per site (based on means from all observations at that site).
+- Then, I will calculate the euclidean distance before performing complete linkage agglomerative hierarchical clustering.
+
+
+```{r, message=FALSE, warning=FALSE}
+#Attach required packages
+library(tidyverse)
+library(here)
+
+# Packages for cluster analysis:
+library(NbClust)
+library(cluster)
+library(factoextra)
+library(dendextend)
+library(ggdendro)
+```
+
+# Read in data and do some wrangling
+
+```{r, message=FALSE, warning=FALSE}
+stream <- read_csv(here("data","sbc_lter_registered_stream_chemistry.csv")) 
+
+#Convert -999 values to NA
+stream <- stream %>% 
+na_if(-999)
+
+#Make a data frame that has a single summary row per site. 
+stream_summary <- stream %>% 
+  group_by(site_code) %>% #Group by site
+  summarise(mean_nh4_uM = mean(nh4_uM, na.rm = TRUE), #Calculate mean observation at that site
+           mean_no3_uM = mean(no3_uM, na.rm = TRUE),
+           mean_po4_uM = mean(po4_uM, na.rm = TRUE),
+           mean_tdn_uM = mean(tdn_uM, na.rm = TRUE),
+           mean_tdp_uM = mean(tdp_uM, na.rm = TRUE),
+           mean_tpc_uM = mean(tpc_uM, na.rm = TRUE),
+           mean_tpn_uM = mean(tpn_uM, na.rm = TRUE),
+           mean_tpp_uM = mean(tpp_uM, na.rm = TRUE),
+           mean_tss_mgperLiter = mean(tss_mgperLiter, na.rm = TRUE),
+           mean_spec_cond_uSpercm = mean(spec_cond_uSpercm, na.rm = TRUE)) 
+
+#Note: a few of these in the summary table says "NaN", which means "not a number." NaN implies a result that cannot be calculated for whatever reason, or is not a floating point number. In this data frame, it's because certain sites had all NAs for those chemistry measurements, and it is not possible to take a mean of a bunch of NAs. 
+```
+
+# Scale the data
+
+```{r, message=FALSE, warning=FALSE}
+# Scale the numeric variables (columns 2:12)
+stream_scaled <- stream_summary %>% 
+  select(2:11) %>% 
+  scale()
+  
+# Update to add rownames (site code) from stream_summary
+rownames(stream_scaled) <- stream_summary$site_code
+
+# The rownames are now the site code (this is useful for visualizing)
+```
+
+
+# Calculate Euclidean distance
+
+Use the `stats::dist()` function to find the Euclidean distance in multivariate space between the different observations (sites).
+
+```{r, message=FALSE, warning=FALSE}
+# Compute dissimilarity values (Euclidean distances):
+euc_distance <- dist(stream_scaled, method = "euclidean")
+
+```
+
+
+# Perform hierarchical clustering by complete linkage with `stats::hclust()`
+
+Next, I use the `stats::hclust()` function to perform hierarchical clustering on the matrix of euclidean distances (`euc_distance`) using complete linkage. 
+
+In complete linkage, clusters are merged by the smallest maximum distance between two observations in distinct clusters.
+
+```{r, message=FALSE, warning=FALSE}
+# Hierarchical clustering (complete linkage)
+hc_complete <- hclust(euc_distance, method = "complete" )
+
+# Plot it (base plot):
+# plot(hc_complete, cex = 0.6, hang = -1)
+
+```
+
+
+# Plot dendrogram using `ggplot()`
+
+Using `ggdendrogram()`, a `ggplot` wrapper. 
+
+```{r, message=FALSE, warning=FALSE}
+ggdendrogram(hc_complete, 
+             rotate = TRUE) +
+  theme_minimal() +
+  labs(x = "Stream Site",
+       y = "",
+       title = "Multivariate Clustering for Water Chemistry by Site, Santa Barbara, CA")
+
+```
+
+# Data and metadata source
+
+**SBC LTER:** Stream chemistry in the Santa Barbara Coastal drainage area, ongoing since 2000  
+**Creators:** Santa Barbara Coastal LTER, & Melack, John M  
+**Citation:** Santa Barbara Coastal LTER and J. Melack. 2019. SBC LTER: Land: Stream chemistry in the Santa Barbara Coastal drainage area, ongoing since 2000 ver 16. Environmental Data Initiative. (https://doi.org/10.6073/pasta/67a558a24ceed9a0a5bf5e46ab841174.) 
