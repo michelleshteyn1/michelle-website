@@ -1,0 +1,152 @@
+---
+title: "Parameter Estimation: Wild Fish Growth"
+description: |
+  In this project, I explored global wild fish catch frpm 1950 - 2012 through nonlinear least squares parameter estimation. Data source: Earth Policy Institute and the U.N. Food and Agriculture Organization (FAO).
+author:
+  - name: Michelle S. Handy
+    url: {}
+date: 03-03-2021
+output:
+  distill::distill_article:
+    self_contained: false
+    code_folding: hide
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+# Overview
+
+This report explores global wild fish catch from 1950 - 2012, using data compiled by Earth Policy Institute and the U.N. Food and Agriculture Organization (FAO). Below, 
+
+- I find an equation with parameters estimated by nonlinear least squares for the increase in global wild fish catch from 1950 - 2012.
+- Then, I prepare a finalized graph showing both the original data and the model output.
+
+
+```{r, message=FALSE, warning=FALSE}
+#Attach required packages
+library(tidyverse)
+library(here)
+library(janitor)
+library(gt)
+library(patchwork)
+library(broom)
+library(nlstools)
+library(SwimmeR)
+library(JumpeR)
+```
+
+
+# Data preparation
+
+Need to remove extraneous rows at the top and bottom in the original dataset. Then, set 1950 = 0 (i.e., create a new column with years starting at 0, instead of value 1950, and use those values for the model).
+
+```{r, message=FALSE, warning=FALSE, results='hide'}
+#Skip the first 5 rows while reading in the data, then fix the column names so that they are all on one line.
+fish <- read_csv(here("data","fish_catch.csv"), skip = 5, col_names = c("Year", "Wild Catch Million Tons","Farmed Fish", "Total Fish Production"))
+
+#Drop the last few rows with metadata and change variable names to lower_snake_case.
+fish <- fish %>% 
+  drop_na() %>% # Only the last few rows with metadata have NAs so it's okay to do this.
+  clean_names()
+
+#Create a new column with years starting at 0. 
+
+#First, create a vector of a 0 to 62 sequence since there are 63 rows in the df.
+year_0 <- seq(from = 0, to = 62)
+
+#Then, bind year_0 as a new variable into the original dataframe.
+fish$year_0 <- year_0
+```
+
+
+# Exploratory graph: wild catch over time
+
+```{r, message=FALSE, warning=FALSE}
+
+ggplot(data = fish, aes(x = year, y = wild_catch_million_tons)) +
+  geom_point() +
+  theme_minimal() +
+  labs(x = "Year", y = "Wild Catch (Million Tons)") + 
+ theme(axis.text.x = element_text(angle = 90))
+
+```
+A logistic relationship describes the trend: from 1950 until about 1990, wild fish catch increases exponentially, and then wild catch remains relatively constant until 2012. This relationship is described by the logistic growth equation: 
+
+$P(t)=\frac{K}{1+Ae^{-kt}}$, where
+
+- $K$ is the carrying capacity
+- $A$ is $\frac{K-P_0}{P_0}$
+- $k$ is the growth rate constant
+
+# Estimate parameters for model describing wild fish catch
+
+### Find initial estimates for *K*, *A* and *k*
+
+Estimate the growth constant during exponential phase to get the starting value for *k*, then eyeball the data to estimate *K* and *A*:
+
+```{r, message=FALSE, warning=FALSE, results='hide'}
+
+# Get only up to year 1990 (or year 40 in the new year column) because that's where the growth rate platued & log transform the population
+# We do this so we can estimate the growth rate constant (k) *during exponential growth phase)
+fish_exp <- fish %>% 
+  filter(year_0 < 40) %>% 
+  mutate(ln_wild_catch = log(wild_catch_million_tons))
+  
+# Model linear to get *k* estimate (the slope of this linear equation is an estimate of the growth rate constant):
+lm_k <- lm(ln_wild_catch ~ year_0, data = fish_exp)
+lm_k
+
+# Coefficient (k) ~ 0.036, can estimate *K* ~180 and *A* ~ 17.
+
+```
+
+Initial estimate for *k* ~ 0.036, and can estimate *K* ~92 and *A* ~ 4.34. Need these estimates because I will use them as starting points for iterative algorithms trying to converge on the parameters. Next, I estimate the parameters using nonlinear least squares (NLS). 
+
+
+### Nonlinear least squares
+
+NLS converges on parameter estimates that minimize the sum of squares of residuals using the (iterative) Gauss-Newton algorithm. 
+
+```{r, message=FALSE, warning=FALSE, results='hide'}
+df_nls <- nls(wild_catch_million_tons ~ K/(1 + A*exp(-r*year_0)),
+              data = fish,
+              start = list(K = 92, A = 4.34, r = 0.036),
+              trace = TRUE
+              )
+
+# See the model summary (null hypothesis: parameter value = 0)
+summary(df_nls)
+
+# Use broom:: functions to get model outputs in tidier format: 
+model_out <- broom::tidy(df_nls) # Use View(model_out) to see the tidy model output.
+
+```
+The model with estimated parameters is:
+$$P(t) = \frac{100.28}{1+4.32e^{-0.07t}}$$
+
+# Visualize model over original observed values
+
+```{r, message=FALSE, warning=FALSE}
+# Make predictions for the population at all of those times (time) in the original df: 
+p_predict <- predict(df_nls)
+
+# Bind predictions to original data frame:
+df_complete <- data.frame(fish, p_predict)
+
+# Plot them all together:
+ggplot(data = df_complete, aes(x = year_0, y = wild_catch_million_tons)) +
+  geom_point() +
+  geom_line(aes(x = year_0, y = p_predict)) +
+  theme_minimal() +
+  labs(x = "Years Elapsed (after 1950)",
+       y = "Wild Catch (million tons)",
+       title = "NLS Estimated Model for Global Wild Fish Catch, 1950 - 2012",
+       subtitle = "Plotted over original observed data points")
+```
+
+# Data source 
+
+Global wild fish catch and aquaculture production, compiled by Earth Policy Institute with 1950-2010 from U.N. Food and Agriculture Organization (FAO), Global Capture Production and Global Aquaculture Production, electronic databases, at (www.fao.org/fishery/topic/16140/en).
