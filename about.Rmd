@@ -3,9 +3,9 @@ title: "About Me"
 description: |
   As a mixed-methods researcher at UC Santa Barbara and at See Change Institute, I design and produce research on the motivators of pro-environmental behavior. I employ advanced statistical methods to interpret data gathered from surveys, experiments, and large datasets. These methods include A/B testing, logistic and linear regressions, univariate and multivariate analysis, and multi-level modeling using statistical software packages such as R, SPSS, MPlus, and Excel. I maintain a robust and reproducible workflow using version-controlled projects with Github and R Markdown to write reports. 
   
-  I'm interested in continuing to build my toolbox for research and data analysis by staying actively involved in the RStudio and TidyTuesday communities. While social psychology research primarily employs regression, ANOVAs, and A/B testing, I plan to continue learning advanced methods for analyzing environmental data including logistic regression, time series data, and spatial analysis.
+  I'm interested in continuing to build my toolbox for research and data analysis by staying actively involved in the RStudio and TidyTuesday communities. While social psychology research primarily employs regression, ANOVAs, and A/B testing, I plan to continue learning advanced methods for analyzing environmental data including logistic regression, time series data, and spatial analysis. For fun, I'm developing a `Shiny` app which conducts text and sentiment analysis of American and English literature.
   
-  For fun, I'm developing a `Shiny` app which conducts text and sentiment analysis of American and English literature!
+  A huge thank you goes out to Dr. Allison Horst and TAs Jessica Couture, Juan Carlos Villaseñor-Derbez, and Casey O'Hara for teaching me these foundational skills in ESM206 and ESM244 at the UCSB Bren School of Environmental Science & Management, and for making it an awesome time along the way! Portfolio projects on this site showcase various assignments from ESM244.
 ---
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
@@ -15,19 +15,22 @@ knitr::opts_chunk$set(echo = FALSE)
   
   I have presented peer reviewed work to a diverse audience of research scientists and academics at four conference presentations.
   
-### Presenting findings at UC Santa Barbara:
-U.S. regional Google search activity for extreme weather terms on Google Trends predicts U.S. regional climate change beliefs on Yale Climate Opinion Maps (Marlon et al., 2020). Presentation at Psychological & Brain Science Department's "Minicon," Winter 2019.
+### Presenting findings at UC Santa Barbara, May 2019:
 
 ![](images/Minicon.jpeg)
 
-### Research Team at Montecito, CA Debris Flow Site:
+U.S. regional Google search activity for extreme weather terms on Google Trends predicts U.S. regional climate change beliefs on Yale Climate Opinion Maps (Marlon et al., 2020). Presentation at Psychological & Brain Science Department's "Minicon".
+
+
+### Research Team at Montecito, CA Debris Flow Site, August 2018:
+
 ![](images/Montecito.jpeg)
+Pictured here with Dr. Sarah Anderson, Dr. Summer Gray, graduate student Erica Goto, and research assistant Julia.
 
 
 
+### Communicating Findings to Activists at Citizens' Climate Lobby, September 2020 
 
-### Communicating Findings to Activists at Citizens' Climate Lobby 
-As part of Dr. David Sherman's presentation to climate activists on actionable insights from Sherman, Shteyn, Han, and Van Boven (2020).
 ![](images/CCL.jpg)
-
+As part of Dr. David Sherman's presentation to climate activists on actionable insights from Sherman, Shteyn, Han, and Van Boven (2020). Pictured here with Dr. Hahrie Han.
 

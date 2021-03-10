@@ -72,13 +72,13 @@ tribble(~Position, ~Year, ~Project, ~Department,
 # Publications
 
 1. Sherman, D. K., **Shteyn, M. F.**, Han, H., & Van Boven, L. (2020). The exchange between citizens and elected officials: A social psychological approach to lobbying for climate policy. *Behavioural Public Policy*.
+2. Sherman, D.K., Updegraff, J., **Handy, M.S.**, Eom, K., & Kim, H. (in press). Beliefs and social norms as precursors of environmental support: The joint influence of collectivism and socioeconomic status. Personality & Social Psychology Bulletin. 
 
 # Manuscripts under Editorial Review or In Preparation
 
-1. Anderson, S.E., **Shteyn, M.F.**, Gehlbach, H., & Virlar-Knight, D. (in preparation). Psychological distance and the effect of connecting extreme weather events to climate change.  
-2. Binning, K.R., Conrique, B.I., Areguin, M., Brick, C., Ehret, P., **Shteyn, M.F.**, Updegraff, J.A., & Sherman, D. K. (in preparation). Health messaging in a diverse society: Effects of gain and loss frames on health behaviors 	among latina/os in the U.S.  
-3. Sherman, D.K., Updegraff, J., **Shteyn, M.F.**, Eom, K., & Kim, H. (under review at *Personality and Social Psychology Bulletin*). The intersection of collectivism and 	socioeconomic status: Examining the impact of beliefs and social norms on environmental action.  
-4. **Shteyn, M.F.**, Block, D.M., Kim, H., Knowles, E.D., Mildenberger, M., & Sherman, D.K. (in preparation). Regional 	extreme weather concern and its relation to support for environmental action. 
+1. Anderson, S.E., **Handy, M.S.**, Gehlbach, H., & Virlar-Knight, D. (in preparation). Psychological distance and the effect of connecting extreme weather events to climate change.  
+2. Binning, K.R., Conrique, B.I., Areguin, M., Brick, C., Ehret, P., **Handy, M.S.**, Updegraff, J.A., & Sherman, D. K. (in preparation). Health messaging in a diverse society: Effects of gain and loss frames on health behaviors 	among latina/os in the U.S.  
+3. **Handy, M.S.**, Block, D.M., Kim, H., Knowles, E.D., Mildenberger, M., & Sherman, D.K. (in preparation). Regional 	extreme weather concern and its relation to support for environmental action. 
 
 # Published Conference Abstracts or Presentations
 

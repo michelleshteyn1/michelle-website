@@ -13,4 +13,4 @@ output:
 site: distill::distill_website
 ---
  
-I am a Ph.D. candidate with 6+ years of experience conducting quantitative and qualitative research in laboratory, field, and online settings. I am passionate about harnessing psychological science to address socially significant issues like climate change and public health. In my free time, I love doing yoga, trying out new recipes, and biking the Pacific coast.
+I am a Ph.D. candidate with 6+ years of experience conducting quantitative and qualitative research in laboratory, field, and online settings. Currently, I work as a Research Associate at See Change Institute, and this summer, I'll be interning at Weight Watchers (WW) as an applied behavioral scientist. I am passionate about harnessing psychological science to address socially significant issues like climate change and public health. In my free time, I love doing yoga, trying out new recipes, and biking the Pacific coast.
