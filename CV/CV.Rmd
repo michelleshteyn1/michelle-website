@@ -72,7 +72,7 @@ tribble(~Position, ~Year, ~Project, ~Department,
 # Publications
 
 1. Sherman, D. K., **Shteyn, M. F.**, Han, H., & Van Boven, L. (2020). The exchange between citizens and elected officials: A social psychological approach to lobbying for climate policy. *Behavioural Public Policy*.
-2. Sherman, D.K., Updegraff, J., **Handy, M.S.**, Eom, K., & Kim, H. (in press). Beliefs and social norms as precursors of environmental support: The joint influence of collectivism and socioeconomic status. Personality & Social Psychology Bulletin. 
+2. Sherman, D.K., Updegraff, J., **Handy, M.S.**, Eom, K., & Kim, H. (in press). Beliefs and social norms as precursors of environmental support: The joint influence of collectivism and socioeconomic status. *Personality & Social Psychology Bulletin*. 
 
 # Manuscripts under Editorial Review or In Preparation
 
